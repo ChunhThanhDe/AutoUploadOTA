@@ -1,0 +1,32 @@
+Chú ý khi dùng ứng dụng OTA service:
+- tạo các folde chứa các file FW trong init.rc, chmod 777
+	# for OTA
+    mkdir /data/vnpt-firmware 0777 system system
+    mkdir /data/vnpt-firmware/basic 0777 system system
+    mkdir /data/vnpt-firmware/delta 0777 system system
+
+hoặc thay đổi folder thì cần thay đổi đường dẫn lưu các file FW trong theo property ro.product.otafilelocation
+src/com/vnptt/ota/common/VnptOtaUtils.java
+	public static final String FIRMWARE_FILE_LOCATION_DEFAULT = "/data/vnpt-firmware";
+	public static final String FIRMWARE_FILE_LOCATION = SystemProperties.get("ro.product.otafilelocation", FIRMWARE_FILE_LOCATION) + "/delta";
+	public static final String FIRMWARE_BASIC_FILE_LOCATION = SystemProperties.get("ro.product.otafilelocation", FIRMWARE_FILE_LOCATION) + "/basic";
+
+- Đường dẫn OTA thay đổi bằng cách thay đổi property ro.product.otaupdateurl
+src/com/vnptt/ota/common/VnptOtaUtils.java
+	private static final String UPDATE_XML = "http://ota.vnptsmartphone.vn/lotus/web/web.php/updateFirmware";
+
+	public static String getUpdateXmlLink(Context ctx) {
+		String updateXmlLink =  Settings.System.getString(ctx.getContentResolver(), "vnptt_ota_url");
+		if (DEBUG) Log.d(TAG, "updateXmlLink is " + updateXmlLink);
+		if(TextUtils.isEmpty(updateXmlLink))
+			updateXmlLink = SystemProperties.get("ro.product.otaupdateurl", UPDATE_XML);
+		if (DEBUG) Log.d(TAG, "updateXmlLink is " + updateXmlLink);
+		return updateXmlLink;
+	}
+
+- Ngoài ra còn có 1 số options khác có thể điều chỉnh qua property:
++ FORCE UPDATE: ro.product.otaforceupdate, mặc định là false
++ DOWNGRADE: ro.product.otadowngrade, mặc định là false
++ device là STB hay smartphone: ro.product.settopbox, mặc định là true (STB)
++ Enable show debug info: vnptt.ota.debug, mặc định là false
+

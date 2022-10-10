@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.vnptt.ota"
+    android:sharedUserId="android.uid.system"
+    android:versionCode="5"
+    android:versionName="5.0.3" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="28" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REBOOT" />
+    <uses-permission android:name="android.permission.RECOVERY" />
+    <uses-permission android:name="android.permission.ACCESS_CACHE_FILESYSTEM" />
+    <uses-permission android:name="android.permission.DELETE_CACHE_FILES" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.REMOVE_TASKS" />
+
+    <protected-broadcast android:name="com.vnptt.ota.DOWNLOAD_LISTENER" />
+    <uses-permission android:name="com.vnptt.ota.DOWNLOAD_LISTENER" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:background="@color/colorGray"
+        android:usesCleartextTraffic="true"
+        android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
+        
+        <activity
+            android:name="com.vnptt.ota.main.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+                <!-- <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" /> -->
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.vnptt.ota.ui.VnptOtaUI"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="com.vnptt.ota.NEW_VERSION_FIRMWARE" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.vnptt.ota.ui.AlertUpgradeFirmware"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Transparent" >
+        </activity>
+	
+        <receiver android:name="com.vnptt.ota.receivers.OTABootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        
+        <service android:name="com.vnptt.ota.service.VnptOtaService" >
+        </service>
+
+        <service android:name="com.vnptt.ota.service.ServiceManagement" >
+            <intent-filter>
+                <action android:name="com.vnptt.ota.service.ServiceManagement" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="com.vnptt.ota.settings.OtaSettingsProvider"
+            android:authorities="com.vnptt.ota.settings.otasettingsprovider" >
+        </provider>
+        
+        <activity
+            android:name="com.vnptt.ota.ui.AlertNewFirmwareAvailable"
+            android:label="@string/alert_have_firmware_title"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Transparent" >
+            <intent-filter>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.vnptt.ota.ui.AlertDownloadFirmwareDone"
+            android:label="@string/alert_download_firmware_done_title"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Transparent" >
+            <intent-filter>
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.vnptt.ota.main.UpdateLocal" >
+        </activity>
+
+        <activity
+            android:name="com.vnptt.ota.main.ForceUpdate">
+        </activity>
+        
+        <activity
+            android:name="com.vnptt.ota.main.StandbyActivity">
+        </activity>
+
+		<activity
+            android:name="com.vnptt.ota.UpdateFwUIActivity"
+            android:label="@string/title_activity_update_fw_ui"
+            android:screenOrientation="landscape"  >
+            <intent-filter>
+                <action android:name="com.vnptt.ota.MANUAL_UPDATE_OTA" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
